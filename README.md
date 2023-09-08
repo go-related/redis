@@ -1,29 +1,18 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+Here I will demonstrate communication between 2 microservices, for simplicity reason we will have both of them into the same repository.
+To communicate we will use Redis and to store data we will use redis as well.
+* Service 1
+  * this will be a simple service with a Crud and will publish an event when create/update/path/Delete will happen.
+* Service 2
+  * this will be the interested. once the event will be published this will send email to appropriate addresses.
 
-### What is this repository for? ###
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+### Prerequisites ###
 
-### How do I get set up? ###
+* Redis docker 
+* configuration for the service (there will be a sample on the repository)
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+### 1- Setup redis ###
 
-### Contribution guidelines ###
 
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact

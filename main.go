@@ -1,28 +1,30 @@
 package main
 
 import (
-	"context"
-	"fmt"
-	"github.com/redis/go-redis/v9"
+	log "github.com/sirupsen/logrus"
+	"github.com/spf13/cobra"
+	"os"
 )
 
+var rootCmd = &cobra.Command{
+	Use:   "app",
+	Short: "A sample application",
+}
+
+func init() {
+	setupLogging()
+	createCommands()
+}
+
 func main() {
-	client := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "", // no password set
-		DB:       0,  // use default DB
-	})
-	ctx := context.Background()
-
-	/*	err := client.Set(ctx, "foo", "bar", 0).Err()
-		if err != nil {
-			panic(err)
-		}*/
-
-	val, err := client.Get(ctx, "foo").Result()
-	if err != nil {
-		panic(err)
+	if err := rootCmd.Execute(); err != nil {
+		log.WithError(err).Errorf("failed to setup commands.")
+		os.Exit(1)
 	}
-	fmt.Println("foo", val)
-	fmt.Println("finished executing")
+}
+
+func setupLogging() {
+	log.SetFormatter(&log.JSONFormatter{})
+	log.SetOutput(os.Stdout)
+	log.SetLevel(log.WarnLevel)
 }
