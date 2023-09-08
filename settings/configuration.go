@@ -1,19 +1,22 @@
-package configurations
+package settings
 
 import (
+	"errors"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
 type Configurations struct {
-	Service1 struct {
-		Port string
-		Name string
-	}
-	Service2 struct {
-		Port string
-		Name string
-	}
+	Service1 Service1
+	Service2 Service2
+}
+type Service1 struct {
+	Port string
+	Name string
+}
+type Service2 struct {
+	Port string
+	Name string
 }
 
 var ApplicationConfiguration Configurations
@@ -27,7 +30,8 @@ func init() {
 
 	if err := v.ReadInConfig(); err != nil {
 		// It's okay if there isn't a config file
-		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
+		var configFileNotFoundError viper.ConfigFileNotFoundError
+		if !errors.Is(err, &configFileNotFoundError) {
 			log.WithError(err).Errorf("error loading config file")
 		}
 	}

@@ -13,6 +13,9 @@ To communicate we will use Redis and to store data we will use redis as well.
 * Redis docker 
 * configuration for the service (there will be a sample on the repository)
 
-### 1- Setup redis ###
+### Notes ###
+* build the application
+  ``` go build -o bin/redis ```
 
-
+* run service1
+  ``` ./bin/redis service1 ```

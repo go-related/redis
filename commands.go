@@ -1,8 +1,10 @@
 package main
 
 import (
-	"fmt"
-	"github.com/go-related/redis/configurations"
+	"github.com/go-related/redis/service1"
+	"github.com/go-related/redis/service2"
+	"github.com/go-related/redis/settings"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -11,8 +13,10 @@ func createCommands() {
 		Use:   "service1",
 		Short: "Run the service1 command",
 		Run: func(cmd *cobra.Command, args []string) {
-
-			fmt.Printf("Running service %s", configurations.ApplicationConfiguration.Service1.Name)
+			_, err := service1.InitService(settings.ApplicationConfiguration.Service1)
+			if err != nil {
+				logrus.Error(err)
+			}
 		},
 	}
 
@@ -20,7 +24,10 @@ func createCommands() {
 		Use:   "service2",
 		Short: "Run the service2 command",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Printf("Running service %s", configurations.ApplicationConfiguration.Service2.Name)
+			_, err := service2.InitService(settings.ApplicationConfiguration.Service2)
+			if err != nil {
+				logrus.Error(err)
+			}
 		},
 	}
 	rootCmd.AddCommand(fooCmd)
