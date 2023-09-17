@@ -221,3 +221,103 @@ func (h *Handler) GetAuthorsByName(c *gin.Context) {
 	}
 	c.IndentedJSON(http.StatusOK, result)
 }
+
+func (h *Handler) UpdateAuthor(c *gin.Context) {
+	id := c.Params.ByName("id")
+
+	idValue, err := strconv.ParseUint(id, 10, 32)
+	if err != nil {
+		log.WithError(err).Error("error converting id to int")
+		errorData := middleware.Response{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusBadRequest, errorData)
+		return
+	}
+	type Author struct {
+		Name string `json:"name"`
+	}
+	var input Author
+	err = c.BindJSON(&input)
+	if err != nil {
+		log.WithError(err).Error("error binding to json")
+		errorData := middleware.Response{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusBadRequest, errorData)
+		return
+	}
+	authorData := model.Author{
+		ID:         uint(idValue),
+		PublicName: input.Name,
+	}
+	err = h.bookDb.UpdateAuthor(context.Background(), authorData)
+	if err != nil {
+		errorData := middleware.Response{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusInternalServerError, errorData)
+		return
+	}
+	c.IndentedJSON(http.StatusOK, authorData)
+}
+
+func (h *Handler) CreateAuthor(c *gin.Context) {
+	type Author struct {
+		Name string `json:"name"`
+	}
+	var input Author
+	err := c.BindJSON(&input)
+	if err != nil {
+		log.WithError(err).Error("error binding to json")
+		errorData := middleware.Response{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusBadRequest, errorData)
+		return
+	}
+	authorData := model.Author{
+		PublicName: input.Name,
+	}
+	data, err := h.bookDb.CreateAuthor(context.Background(), authorData)
+	if err != nil {
+		errorData := middleware.Response{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusInternalServerError, errorData)
+		return
+	}
+	c.IndentedJSON(http.StatusCreated, data)
+}
+
+func (h *Handler) DeleteAuthor(c *gin.Context) {
+	id := c.Params.ByName("id")
+	idValue, err := strconv.ParseUint(id, 10, 32)
+	if err != nil {
+		log.WithError(err).Error("error converting id to int")
+		errorData := middleware.Response{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusBadRequest, errorData)
+		return
+	}
+
+	err = h.bookDb.DeleteAuthor(context.Background(), uint(idValue))
+	if err != nil {
+		errorData := middleware.Response{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusInternalServerError, errorData)
+		return
+	}
+	c.IndentedJSON(http.StatusNoContent, gin.H{
+		"message": "Resource deleted successfully",
+	})
+}

@@ -30,6 +30,9 @@ func InitService(appSettings settings.Service1) (*Service, error) {
 	router.GET("/v1/api/authors", booksHandler.GetAuthors)
 	router.GET("/v1/api/authors/:id", booksHandler.GetAuthor)
 	router.GET("/v1/api/authors/:name", booksHandler.GetAuthorsByName)
+	router.PUT("/v1/api/authors/:id", booksHandler.UpdateAuthor)
+	router.POST("/v1/api/authors", booksHandler.CreateAuthor)
+	router.DELETE("/v1/api/authors/:id", booksHandler.DeleteAuthor)
 	err := router.Run(fmt.Sprintf(":%s", appSettings.Port))
 	if err != nil {
 		log.WithError(err).Errorf("Setting up service failed.")
