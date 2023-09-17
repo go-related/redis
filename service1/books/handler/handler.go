@@ -21,7 +21,7 @@ func NewHandler(bookDb datebase.BooksDB, router *gin.Engine) *Handler {
 	// register authors
 	v1.GET("/authors", handler.GetAuthors)
 	v1.GET("/authors/:id", handler.GetAuthor)
-	v1.GET("/authors/:name", handler.GetAuthorsByName)
+	//v1.GET("/authors/:name", handler.GetAuthorsByName)
 	v1.PUT("/authors/:id", handler.UpdateAuthor)
 	v1.POST("/authors", handler.CreateAuthor)
 	v1.DELETE("/authors/:id", handler.DeleteAuthor)
@@ -29,7 +29,7 @@ func NewHandler(bookDb datebase.BooksDB, router *gin.Engine) *Handler {
 	//register books
 	v1.GET("/books", handler.GetBooks)
 	v1.GET("/books/:id", handler.GetBook)
-	v1.GET("/books/:title", handler.GetBooksByTitle)
+	//v1.GET("/books/:title", handler.GetBooksByTitle)
 	v1.PUT("/books/:id", handler.UpdateBook)
 	v1.POST("/books", handler.CreateBook)
 	v1.DELETE("/books/:id", handler.DeleteBook)
