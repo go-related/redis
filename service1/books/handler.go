@@ -36,6 +36,9 @@ func NewHandler(bookDb datebase.BooksDB, router *gin.Engine) *Handler {
 	v1.GET("/books", handler.GetBooks)
 	v1.GET("/books/:id", handler.GetBook)
 	v1.GET("/books/:title", handler.GetBooksByTitle)
+	v1.PUT("/books/:id", handler.UpdateBook)
+	v1.POST("/books", handler.CreateBook)
+	v1.DELETE("/books/:id", handler.DeleteBook)
 
 	return handler
 }
@@ -401,4 +404,168 @@ func (h *Handler) GetBooksByTitle(c *gin.Context) {
 		return
 	}
 	c.IndentedJSON(http.StatusOK, result)
+}
+
+func (h *Handler) UpdateBook(c *gin.Context) {
+	id := c.Params.ByName("id")
+
+	idValue, err := strconv.ParseUint(id, 10, 32)
+	if err != nil {
+		log.WithError(err).Error("error converting id to int")
+		errorData := middleware.Response{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusBadRequest, errorData)
+		return
+	}
+	type Book struct {
+		Title   string `json:"title"`
+		Authors []uint `json:"authors"`
+		Genres  []uint `json:"genres"`
+	}
+	var input Book
+	err = c.BindJSON(&input)
+	if err != nil {
+		log.WithError(err).Error("error binding to json")
+		errorData := middleware.Response{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusBadRequest, errorData)
+		return
+	}
+	//TODO check if the list of Authors and genres is valid
+	// implement is valid for the Model
+	bookData := model.Book{
+		ID:      uint(idValue),
+		Title:   input.Title,
+		Authors: []model.Author{},
+		Genres:  []model.Genre{},
+	}
+	for _, dt := range input.Authors {
+		authorDt, err := h.BookDb.GetAuthorById(context.Background(), dt)
+		if err != nil {
+			log.WithError(err).Error("invalid author Id")
+			errorData := middleware.Response{
+				StatusCode: http.StatusBadRequest,
+				Err:        err,
+			}
+			c.AbortWithStatusJSON(http.StatusBadRequest, errorData)
+			return
+		}
+		bookData.Authors = append(bookData.Authors, *authorDt)
+	}
+	for _, dt := range input.Genres {
+		genreDt, err := h.BookDb.GetGenresById(context.Background(), dt)
+		if err != nil {
+			log.WithError(err).Error("invalid genre Id")
+			errorData := middleware.Response{
+				StatusCode: http.StatusBadRequest,
+				Err:        err,
+			}
+			c.AbortWithStatusJSON(http.StatusBadRequest, errorData)
+			return
+		}
+		bookData.Genres = append(bookData.Genres, *genreDt)
+	}
+	err = h.BookDb.UpdateBook(context.Background(), bookData)
+	if err != nil {
+		errorData := middleware.Response{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusInternalServerError, errorData)
+		return
+	}
+	c.IndentedJSON(http.StatusOK, bookData)
+}
+
+func (h *Handler) CreateBook(c *gin.Context) {
+	type Book struct {
+		Title   string `json:"title"`
+		Authors []uint `json:"authors"`
+		Genres  []uint `json:"genres"`
+	}
+	var input Book
+	err := c.BindJSON(&input)
+	if err != nil {
+		log.WithError(err).Error("error binding to json")
+		errorData := middleware.Response{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusBadRequest, errorData)
+		return
+	}
+	//TODO check if the list of Authors and genres is valid
+	// implement is valid for the Model
+	bookData := model.Book{
+		Title:   input.Title,
+		Authors: []model.Author{},
+		Genres:  []model.Genre{},
+	}
+	for _, dt := range input.Authors {
+		authorDt, err := h.BookDb.GetAuthorById(context.Background(), dt)
+		if err != nil {
+			log.WithError(err).Error("invalid author Id")
+			errorData := middleware.Response{
+				StatusCode: http.StatusBadRequest,
+				Err:        err,
+			}
+			c.AbortWithStatusJSON(http.StatusBadRequest, errorData)
+			return
+		}
+		bookData.Authors = append(bookData.Authors, *authorDt)
+	}
+	for _, dt := range input.Genres {
+		genreDt, err := h.BookDb.GetGenresById(context.Background(), dt)
+		if err != nil {
+			log.WithError(err).Error("invalid genre Id")
+			errorData := middleware.Response{
+				StatusCode: http.StatusBadRequest,
+				Err:        err,
+			}
+			c.AbortWithStatusJSON(http.StatusBadRequest, errorData)
+			return
+		}
+		bookData.Genres = append(bookData.Genres, *genreDt)
+	}
+	data, err := h.BookDb.CreateBook(context.Background(), bookData)
+	if err != nil {
+		errorData := middleware.Response{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusInternalServerError, errorData)
+		return
+	}
+	c.IndentedJSON(http.StatusCreated, data)
+}
+
+func (h *Handler) DeleteBook(c *gin.Context) {
+	id := c.Params.ByName("id")
+	idValue, err := strconv.ParseUint(id, 10, 32)
+	if err != nil {
+		log.WithError(err).Error("error converting id to int")
+		errorData := middleware.Response{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusBadRequest, errorData)
+		return
+	}
+
+	err = h.BookDb.DeleteBook(context.Background(), uint(idValue))
+	if err != nil {
+		errorData := middleware.Response{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusInternalServerError, errorData)
+		return
+	}
+	c.IndentedJSON(http.StatusNoContent, gin.H{
+		"message": "Resource deleted successfully",
+	})
 }
