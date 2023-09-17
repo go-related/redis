@@ -6,10 +6,11 @@ import (
 )
 
 type BooksDB interface {
-	CreateAuthor(ctx context.Context, data model.Author) error
+	CreateAuthor(ctx context.Context, data model.Author) (model.Author, error)
 	UpdateAuthor(ctx context.Context, data model.Author) error
 	DeleteAuthor(ctx context.Context, Id uint) error
 	GetAllAuthors(ctx context.Context) ([]model.Author, error)
+	GetAuthorById(ctx context.Context, Id uint) (*model.Author, error)
 	SearchAuthorsByName(ctx context.Context, title string) ([]model.Author, error)
 
 	CreateGenre(ctx context.Context, data model.Genre) (model.Genre, error)

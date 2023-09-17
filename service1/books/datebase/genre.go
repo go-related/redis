@@ -2,6 +2,7 @@ package datebase
 
 import (
 	"context"
+	"fmt"
 	"github.com/go-related/redis/service1/books/model"
 )
 
@@ -46,5 +47,5 @@ func (b *booksDb) GetGenresById(ctx context.Context, id uint) (*model.Genre, err
 			return dt, nil
 		}
 	}
-	return nil, nil
+	return nil, fmt.Errorf("entity not found")
 }
