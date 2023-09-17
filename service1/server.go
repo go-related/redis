@@ -3,8 +3,8 @@ package service1
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/go-related/redis/service1/books"
 	"github.com/go-related/redis/service1/books/datebase"
+	"github.com/go-related/redis/service1/books/handler"
 	"github.com/go-related/redis/settings"
 	log "github.com/sirupsen/logrus"
 )
@@ -16,7 +16,7 @@ type Service struct {
 func InitService(appSettings settings.Service1) (*Service, error) {
 	router := gin.Default()
 	booksDb := datebase.NewBooksDB()
-	books.NewHandler(booksDb, router)
+	handler.NewHandler(booksDb, router)
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "hello world",
