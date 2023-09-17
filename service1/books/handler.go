@@ -17,7 +17,7 @@ func NewHandler(bookDb datebase.BooksDB) *Handler {
 	}
 }
 
-// implement crud for handles GET /v1/api/genres
+// Handler implements crud for handles GET /v1/api/genres
 type Handler struct {
 	bookDb datebase.BooksDB
 }

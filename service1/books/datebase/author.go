@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func (b *booksDb) CreateAuthor(ctx context.Context, data model.Author) (model.Author, error) {
+func (b *booksDb) CreateAuthor(_ context.Context, data model.Author) (model.Author, error) {
 	data.ID = uint(len(b.Authors) + 1)
 	data.IsDeleted = false
 	b.Authors = append(b.Authors, &data)
@@ -32,7 +32,7 @@ func (b *booksDb) DeleteAuthor(ctx context.Context, Id uint) error {
 	return nil
 }
 
-func (b *booksDb) GetAllAuthors(ctx context.Context) ([]model.Author, error) {
+func (b *booksDb) GetAllAuthors(_ context.Context) ([]model.Author, error) {
 	var result []model.Author
 	for _, dt := range b.Authors {
 		if !dt.IsDeleted {
@@ -42,7 +42,7 @@ func (b *booksDb) GetAllAuthors(ctx context.Context) ([]model.Author, error) {
 	return result, nil
 }
 
-func (b *booksDb) SearchAuthorsByName(ctx context.Context, title string) ([]model.Author, error) {
+func (b *booksDb) SearchAuthorsByName(_ context.Context, title string) ([]model.Author, error) {
 	var result []model.Author
 	for _, dt := range b.Authors {
 		if !dt.IsDeleted && strings.Contains(dt.PublicName, title) {
@@ -52,7 +52,7 @@ func (b *booksDb) SearchAuthorsByName(ctx context.Context, title string) ([]mode
 	return result, nil
 }
 
-func (b *booksDb) GetAuthorById(ctx context.Context, id uint) (*model.Author, error) {
+func (b *booksDb) GetAuthorById(_ context.Context, id uint) (*model.Author, error) {
 	for _, dt := range b.Authors {
 		if dt.ID == id {
 			return dt, nil
