@@ -164,3 +164,60 @@ func (h *Handler) DeleteGenre(c *gin.Context) {
 		"message": "Resource deleted successfully",
 	})
 }
+
+func (h *Handler) GetAuthors(c *gin.Context) {
+	type QueryParameter struct {
+		Limit  string `form:"limit,default=5" binding:"numeric"`
+		Offset string `form:"offset,default=0" binding:"numeric"`
+	}
+	//TODO make uses of the pagination
+	result, err := h.bookDb.GetAllAuthors(context.Background())
+	if err != nil {
+		errorData := middleware.Response{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusInternalServerError, errorData)
+		return
+	}
+	c.IndentedJSON(http.StatusOK, result)
+}
+
+func (h *Handler) GetAuthor(c *gin.Context) {
+	id := c.Params.ByName("id")
+
+	idValue, err := strconv.ParseUint(id, 10, 32)
+	if err != nil {
+		log.WithError(err).Error("error converting id to int")
+		errorData := middleware.Response{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusBadRequest, errorData)
+		return
+	}
+	result, err := h.bookDb.GetAuthorById(context.Background(), uint(idValue))
+	if err != nil {
+		errorData := middleware.Response{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusInternalServerError, errorData)
+		return
+	}
+	c.IndentedJSON(http.StatusOK, result)
+}
+
+func (h *Handler) GetAuthorsByName(c *gin.Context) {
+	name := c.Params.ByName("name")
+	result, err := h.bookDb.SearchAuthorsByName(context.Background(), name)
+	if err != nil {
+		errorData := middleware.Response{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusInternalServerError, errorData)
+		return
+	}
+	c.IndentedJSON(http.StatusOK, result)
+}
