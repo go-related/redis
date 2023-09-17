@@ -16,6 +16,7 @@ type BooksDB interface {
 	UpdateGenre(ctx context.Context, data model.Genre) error
 	DeleteGenre(ctx context.Context, Id uint) error
 	GetAllGenres(ctx context.Context) ([]model.Genre, error)
+	GetGenresById(ctx context.Context, Id uint) (*model.Genre, error)
 
 	CreateBook(ctx context.Context, data model.Book) error
 	UpdateBook(ctx context.Context, data model.Book) error

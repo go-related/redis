@@ -13,7 +13,7 @@ func (b *booksDb) CreateGenre(ctx context.Context, data model.Genre) error {
 }
 
 func (b *booksDb) UpdateGenre(ctx context.Context, data model.Genre) error {
-	currentData, err := b.GetById(ctx, data.ID)
+	currentData, err := b.GetGenresById(ctx, data.ID)
 	if err != nil {
 		return err
 	}
@@ -22,7 +22,7 @@ func (b *booksDb) UpdateGenre(ctx context.Context, data model.Genre) error {
 }
 
 func (b *booksDb) DeleteGenre(ctx context.Context, Id uint) error {
-	currentData, err := b.GetById(ctx, Id)
+	currentData, err := b.GetGenresById(ctx, Id)
 	if err != nil {
 		return err
 	}
@@ -40,7 +40,7 @@ func (b *booksDb) GetAllGenres(ctx context.Context) ([]model.Genre, error) {
 	return result, nil
 }
 
-func (b *booksDb) GetById(ctx context.Context, id uint) (*model.Genre, error) {
+func (b *booksDb) GetGenresById(ctx context.Context, id uint) (*model.Genre, error) {
 	for _, dt := range b.Genre {
 		if dt.ID == id {
 			return dt, nil
