@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/gin-gonic/gin"
 	"github.com/go-related/redis/service1/books/datebase"
+	"github.com/go-related/redis/service1/books/model"
 	"github.com/go-related/redis/service1/middleware"
 	log "github.com/sirupsen/logrus"
 	"net/http"
@@ -62,4 +63,77 @@ func (h *Handler) GetGenre(c *gin.Context) {
 		return
 	}
 	c.IndentedJSON(http.StatusOK, result)
+}
+
+func (h *Handler) UpdateGenre(c *gin.Context) {
+	id := c.Params.ByName("id")
+
+	idValue, err := strconv.ParseUint(id, 10, 32)
+	if err != nil {
+		log.WithError(err).Error("error converting id to int")
+		errorData := middleware.Response{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusBadRequest, errorData)
+		return
+	}
+	type Genre struct {
+		Name string `json:"name"`
+	}
+	var input Genre
+	err = c.BindJSON(&input)
+	if err != nil {
+		log.WithError(err).Error("error binding to json")
+		errorData := middleware.Response{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusBadRequest, errorData)
+		return
+	}
+	genreData := model.Genre{
+		ID:   uint(idValue),
+		Name: input.Name,
+	}
+	err = h.bookDb.UpdateGenre(context.Background(), genreData)
+	if err != nil {
+		errorData := middleware.Response{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusInternalServerError, errorData)
+		return
+	}
+	c.IndentedJSON(http.StatusOK, genreData)
+}
+
+func (h *Handler) CreateGenre(c *gin.Context) {
+	type Genre struct {
+		Name string `json:"name"`
+	}
+	var input Genre
+	err := c.BindJSON(&input)
+	if err != nil {
+		log.WithError(err).Error("error binding to json")
+		errorData := middleware.Response{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusBadRequest, errorData)
+		return
+	}
+	genreData := model.Genre{
+		Name: input.Name,
+	}
+	data, err := h.bookDb.CreateGenre(context.Background(), genreData)
+	if err != nil {
+		errorData := middleware.Response{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusInternalServerError, errorData)
+		return
+	}
+	c.IndentedJSON(http.StatusCreated, data)
 }

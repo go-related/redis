@@ -24,6 +24,7 @@ func InitService(appSettings settings.Service1) (*Service, error) {
 	})
 	router.GET("/v1/api/genres", booksHandler.GetGenres)
 	router.GET("/v1/api/genres/:id", booksHandler.GetGenre)
+	router.PUT("/v1/api/genres/:id", booksHandler.UpdateGenre)
 	err := router.Run(fmt.Sprintf(":%s", appSettings.Port))
 	if err != nil {
 		log.WithError(err).Errorf("Setting up service failed.")

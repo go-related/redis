@@ -5,11 +5,11 @@ import (
 	"github.com/go-related/redis/service1/books/model"
 )
 
-func (b *booksDb) CreateGenre(ctx context.Context, data model.Genre) error {
+func (b *booksDb) CreateGenre(ctx context.Context, data model.Genre) (model.Genre, error) {
 	data.ID = uint(len(b.Genre) + 1)
 	data.IsDeleted = false
 	b.Genre = append(b.Genre, &data)
-	return nil
+	return data, nil
 }
 
 func (b *booksDb) UpdateGenre(ctx context.Context, data model.Genre) error {

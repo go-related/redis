@@ -12,7 +12,7 @@ type BooksDB interface {
 	GetAllAuthors(ctx context.Context) ([]model.Author, error)
 	SearchAuthorsByName(ctx context.Context, title string) ([]model.Author, error)
 
-	CreateGenre(ctx context.Context, data model.Genre) error
+	CreateGenre(ctx context.Context, data model.Genre) (model.Genre, error)
 	UpdateGenre(ctx context.Context, data model.Genre) error
 	DeleteGenre(ctx context.Context, Id uint) error
 	GetAllGenres(ctx context.Context) ([]model.Genre, error)
