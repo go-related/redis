@@ -11,15 +11,34 @@ import (
 	"strconv"
 )
 
-func NewHandler(bookDb datebase.BooksDB) *Handler {
-	return &Handler{
-		bookDb: bookDb,
+func NewHandler(bookDb datebase.BooksDB, router *gin.Engine) *Handler {
+	handler := &Handler{
+		BookDb: bookDb,
+		Engine: router,
 	}
+	v1 := router.Group("/v1/api")
+	// register genres
+	v1.GET("/genres", handler.GetGenres)
+	v1.GET("/genres/:id", handler.GetGenre)
+	v1.PUT("/genres/:id", handler.UpdateGenre)
+	v1.POST("/genres", handler.CreateGenre)
+	v1.DELETE("/genres/:id", handler.DeleteGenre)
+
+	// register authors
+	v1.GET("/authors", handler.GetAuthors)
+	v1.GET("/authors/:id", handler.GetAuthor)
+	v1.GET("/authors/:name", handler.GetAuthorsByName)
+	v1.PUT("/authors/:id", handler.UpdateAuthor)
+	v1.POST("/authors", handler.CreateAuthor)
+	v1.DELETE("/authors/:id", handler.DeleteAuthor)
+
+	return handler
 }
 
 // Handler implements crud for handles GET /v1/api/genres
 type Handler struct {
-	bookDb datebase.BooksDB
+	BookDb datebase.BooksDB
+	Engine *gin.Engine
 }
 
 func (h *Handler) GetGenres(c *gin.Context) {
@@ -28,7 +47,7 @@ func (h *Handler) GetGenres(c *gin.Context) {
 		Offset string `form:"offset,default=0" binding:"numeric"`
 	}
 	//TODO make uses of the pagination
-	result, err := h.bookDb.GetAllGenres(context.Background())
+	result, err := h.BookDb.GetAllGenres(context.Background())
 	if err != nil {
 		errorData := middleware.Response{
 			StatusCode: http.StatusInternalServerError,
@@ -53,7 +72,7 @@ func (h *Handler) GetGenre(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, errorData)
 		return
 	}
-	result, err := h.bookDb.GetGenresById(context.Background(), uint(idValue))
+	result, err := h.BookDb.GetGenresById(context.Background(), uint(idValue))
 	if err != nil {
 		errorData := middleware.Response{
 			StatusCode: http.StatusInternalServerError,
@@ -96,7 +115,7 @@ func (h *Handler) UpdateGenre(c *gin.Context) {
 		ID:   uint(idValue),
 		Name: input.Name,
 	}
-	err = h.bookDb.UpdateGenre(context.Background(), genreData)
+	err = h.BookDb.UpdateGenre(context.Background(), genreData)
 	if err != nil {
 		errorData := middleware.Response{
 			StatusCode: http.StatusInternalServerError,
@@ -126,7 +145,7 @@ func (h *Handler) CreateGenre(c *gin.Context) {
 	genreData := model.Genre{
 		Name: input.Name,
 	}
-	data, err := h.bookDb.CreateGenre(context.Background(), genreData)
+	data, err := h.BookDb.CreateGenre(context.Background(), genreData)
 	if err != nil {
 		errorData := middleware.Response{
 			StatusCode: http.StatusInternalServerError,
@@ -151,7 +170,7 @@ func (h *Handler) DeleteGenre(c *gin.Context) {
 		return
 	}
 
-	err = h.bookDb.DeleteGenre(context.Background(), uint(idValue))
+	err = h.BookDb.DeleteGenre(context.Background(), uint(idValue))
 	if err != nil {
 		errorData := middleware.Response{
 			StatusCode: http.StatusInternalServerError,
@@ -171,7 +190,7 @@ func (h *Handler) GetAuthors(c *gin.Context) {
 		Offset string `form:"offset,default=0" binding:"numeric"`
 	}
 	//TODO make uses of the pagination
-	result, err := h.bookDb.GetAllAuthors(context.Background())
+	result, err := h.BookDb.GetAllAuthors(context.Background())
 	if err != nil {
 		errorData := middleware.Response{
 			StatusCode: http.StatusInternalServerError,
@@ -196,7 +215,7 @@ func (h *Handler) GetAuthor(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusBadRequest, errorData)
 		return
 	}
-	result, err := h.bookDb.GetAuthorById(context.Background(), uint(idValue))
+	result, err := h.BookDb.GetAuthorById(context.Background(), uint(idValue))
 	if err != nil {
 		errorData := middleware.Response{
 			StatusCode: http.StatusInternalServerError,
@@ -210,7 +229,7 @@ func (h *Handler) GetAuthor(c *gin.Context) {
 
 func (h *Handler) GetAuthorsByName(c *gin.Context) {
 	name := c.Params.ByName("name")
-	result, err := h.bookDb.SearchAuthorsByName(context.Background(), name)
+	result, err := h.BookDb.SearchAuthorsByName(context.Background(), name)
 	if err != nil {
 		errorData := middleware.Response{
 			StatusCode: http.StatusInternalServerError,
@@ -253,7 +272,7 @@ func (h *Handler) UpdateAuthor(c *gin.Context) {
 		ID:         uint(idValue),
 		PublicName: input.Name,
 	}
-	err = h.bookDb.UpdateAuthor(context.Background(), authorData)
+	err = h.BookDb.UpdateAuthor(context.Background(), authorData)
 	if err != nil {
 		errorData := middleware.Response{
 			StatusCode: http.StatusInternalServerError,
@@ -283,7 +302,7 @@ func (h *Handler) CreateAuthor(c *gin.Context) {
 	authorData := model.Author{
 		PublicName: input.Name,
 	}
-	data, err := h.bookDb.CreateAuthor(context.Background(), authorData)
+	data, err := h.BookDb.CreateAuthor(context.Background(), authorData)
 	if err != nil {
 		errorData := middleware.Response{
 			StatusCode: http.StatusInternalServerError,
@@ -308,7 +327,7 @@ func (h *Handler) DeleteAuthor(c *gin.Context) {
 		return
 	}
 
-	err = h.bookDb.DeleteAuthor(context.Background(), uint(idValue))
+	err = h.BookDb.DeleteAuthor(context.Background(), uint(idValue))
 	if err != nil {
 		errorData := middleware.Response{
 			StatusCode: http.StatusInternalServerError,
