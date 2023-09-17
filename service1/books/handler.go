@@ -32,6 +32,11 @@ func NewHandler(bookDb datebase.BooksDB, router *gin.Engine) *Handler {
 	v1.POST("/authors", handler.CreateAuthor)
 	v1.DELETE("/authors/:id", handler.DeleteAuthor)
 
+	//register books
+	v1.GET("/books", handler.GetBooks)
+	v1.GET("/books/:id", handler.GetBook)
+	v1.GET("/books/:title", handler.GetBooksByTitle)
+
 	return handler
 }
 
@@ -339,4 +344,61 @@ func (h *Handler) DeleteAuthor(c *gin.Context) {
 	c.IndentedJSON(http.StatusNoContent, gin.H{
 		"message": "Resource deleted successfully",
 	})
+}
+
+func (h *Handler) GetBooks(c *gin.Context) {
+	type QueryParameter struct {
+		Limit  string `form:"limit,default=5" binding:"numeric"`
+		Offset string `form:"offset,default=0" binding:"numeric"`
+	}
+	//TODO make uses of the pagination
+	result, err := h.BookDb.GetAllBooks(context.Background())
+	if err != nil {
+		errorData := middleware.Response{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusInternalServerError, errorData)
+		return
+	}
+	c.IndentedJSON(http.StatusOK, result)
+}
+
+func (h *Handler) GetBook(c *gin.Context) {
+	id := c.Params.ByName("id")
+
+	idValue, err := strconv.ParseUint(id, 10, 32)
+	if err != nil {
+		log.WithError(err).Error("error converting id to int")
+		errorData := middleware.Response{
+			StatusCode: http.StatusBadRequest,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusBadRequest, errorData)
+		return
+	}
+	result, err := h.BookDb.GetBookById(context.Background(), uint(idValue))
+	if err != nil {
+		errorData := middleware.Response{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusInternalServerError, errorData)
+		return
+	}
+	c.IndentedJSON(http.StatusOK, result)
+}
+
+func (h *Handler) GetBooksByTitle(c *gin.Context) {
+	title := c.Params.ByName("title")
+	result, err := h.BookDb.SearchBooksByTitle(context.Background(), title)
+	if err != nil {
+		errorData := middleware.Response{
+			StatusCode: http.StatusInternalServerError,
+			Err:        err,
+		}
+		c.AbortWithStatusJSON(http.StatusInternalServerError, errorData)
+		return
+	}
+	c.IndentedJSON(http.StatusOK, result)
 }
