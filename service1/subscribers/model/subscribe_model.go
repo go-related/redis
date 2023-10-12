@@ -13,6 +13,6 @@ type Subscribe struct {
 	ID         uint
 	IsDeleted  bool
 	Subscriber Subscriber
-	Genres     *[]model.Genre
+	Books      *[]model.Book
 	Authors    *[]model.Author
 }
