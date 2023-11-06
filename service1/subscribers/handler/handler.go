@@ -4,10 +4,9 @@ import (
 	"context"
 	"github.com/gin-gonic/gin"
 	"github.com/go-related/redis/redis"
-	"github.com/go-related/redis/service1/books/datebase"
 	bookmodel "github.com/go-related/redis/service1/books/model"
+	"github.com/go-related/redis/service1/database"
 	"github.com/go-related/redis/service1/middleware"
-	"github.com/go-related/redis/service1/subscribers/databases"
 	"github.com/go-related/redis/service1/subscribers/model"
 	log "github.com/sirupsen/logrus"
 	"net/http"
@@ -16,15 +15,13 @@ import (
 
 // SubscriberHandler implements crud for handles GET /v1/api/genres
 type SubscriberHandler struct {
-	BookDb datebase.BooksDB
-	DB     databases.SubscribeDB
+	DB     database.BooksDB
 	Engine *gin.Engine
 	Redis  *redis.RedisService
 }
 
-func NewSubscriberHandler(bookDb datebase.BooksDB, db databases.SubscribeDB, router *gin.Engine, rds *redis.RedisService) *SubscriberHandler {
+func NewSubscriberHandler(db database.BooksDB, router *gin.Engine, rds *redis.RedisService) *SubscriberHandler {
 	handler := &SubscriberHandler{
-		BookDb: bookDb,
 		Engine: router,
 		DB:     db,
 		Redis:  rds,
@@ -283,7 +280,7 @@ func (h *SubscriberHandler) CreateSubscribe(c *gin.Context) {
 	books := make([]bookmodel.Book, 0)
 	if input.Books != nil {
 		for _, bookId := range *input.Books {
-			bookData, err := h.BookDb.GetBookById(context.Background(), bookId)
+			bookData, err := h.DB.GetBookById(context.Background(), bookId)
 			if err != nil {
 				errorData := middleware.Response{
 					StatusCode: http.StatusBadRequest,
@@ -298,7 +295,7 @@ func (h *SubscriberHandler) CreateSubscribe(c *gin.Context) {
 	authors := make([]bookmodel.Author, 0)
 	if input.Authors != nil {
 		for _, authorID := range *input.Authors {
-			authorData, err := h.BookDb.GetAuthorById(context.Background(), authorID)
+			authorData, err := h.DB.GetAuthorById(context.Background(), authorID)
 			if err != nil {
 				errorData := middleware.Response{
 					StatusCode: http.StatusBadRequest,

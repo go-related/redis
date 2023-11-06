@@ -23,12 +23,14 @@ type Service1 struct {
 	Port               string
 	Name               string
 	NewBookChannelName string
+	DbConnectionString string
 }
 
 type Service2 struct {
 	Port               string
 	Name               string
 	NewBookChannelName string
+	DbConnectionString string
 }
 
 var ApplicationConfiguration Configurations

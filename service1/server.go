@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	redis2 "github.com/go-related/redis/redis"
-	"github.com/go-related/redis/service1/books/datebase"
 	"github.com/go-related/redis/service1/books/handler"
-	"github.com/go-related/redis/service1/subscribers/databases"
+	"github.com/go-related/redis/service1/database"
 	handler2 "github.com/go-related/redis/service1/subscribers/handler"
 	"github.com/go-related/redis/settings"
 	log "github.com/sirupsen/logrus"
@@ -18,11 +17,13 @@ type Service struct {
 
 func InitService(appSettings settings.Service1) (*Service, error) {
 	router := gin.Default()
-	booksDb := datebase.NewBooksDB()
+	booksDb, err := database.NewBooks()
+	if err != nil {
+		log.WithError(err).Fatal("couldn't connect to db")
+	}
 	redisService := redis2.New()
 	handler.NewHandler(booksDb, router, redisService)
-	subscriberDb := databases.NewSubscriberDB()
-	handler2.NewSubscriberHandler(booksDb, subscriberDb, router, redisService)
+	handler2.NewSubscriberHandler(booksDb, router, redisService)
 
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
@@ -30,7 +31,7 @@ func InitService(appSettings settings.Service1) (*Service, error) {
 		})
 	})
 
-	err := router.Run(fmt.Sprintf(":%s", appSettings.Port))
+	err = router.Run(fmt.Sprintf(":%s", appSettings.Port))
 	if err != nil {
 		log.WithError(err).Errorf("Setting up service failed.")
 		return nil, err
