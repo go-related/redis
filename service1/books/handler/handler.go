@@ -2,13 +2,15 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/go-related/redis/redis"
 	"github.com/go-related/redis/service1/books/datebase"
 )
 
-func NewHandler(bookDb datebase.BooksDB, router *gin.Engine) *Handler {
+func NewHandler(bookDb datebase.BooksDB, router *gin.Engine, rd *redis.RedisService) *Handler {
 	handler := &Handler{
 		BookDb: bookDb,
 		Engine: router,
+		Redis:  rd,
 	}
 	v1 := router.Group("/v1/api")
 	// register genres
@@ -41,4 +43,5 @@ func NewHandler(bookDb datebase.BooksDB, router *gin.Engine) *Handler {
 type Handler struct {
 	BookDb datebase.BooksDB
 	Engine *gin.Engine
+	Redis  *redis.RedisService
 }

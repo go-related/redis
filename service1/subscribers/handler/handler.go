@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"github.com/gin-gonic/gin"
+	"github.com/go-related/redis/redis"
 	"github.com/go-related/redis/service1/books/datebase"
 	bookmodel "github.com/go-related/redis/service1/books/model"
 	"github.com/go-related/redis/service1/middleware"
@@ -18,13 +19,15 @@ type SubscriberHandler struct {
 	BookDb datebase.BooksDB
 	DB     databases.SubscribeDB
 	Engine *gin.Engine
+	Redis  *redis.RedisService
 }
 
-func NewSubscriberHandler(bookDb datebase.BooksDB, db databases.SubscribeDB, router *gin.Engine) *SubscriberHandler {
+func NewSubscriberHandler(bookDb datebase.BooksDB, db databases.SubscribeDB, router *gin.Engine, rds *redis.RedisService) *SubscriberHandler {
 	handler := &SubscriberHandler{
 		BookDb: bookDb,
 		Engine: router,
 		DB:     db,
+		Redis:  rds,
 	}
 	v1 := router.Group("/v1/api")
 	// register subscribers

@@ -2,9 +2,11 @@ package handler
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/go-related/redis/service1/books/model"
 	"github.com/go-related/redis/service1/middleware"
+	"github.com/go-related/redis/settings"
 	log "github.com/sirupsen/logrus"
 	"net/http"
 	"strconv"
@@ -201,6 +203,7 @@ func (h *Handler) CreateBook(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, errorData)
 		return
 	}
+	go h.publishNewBookToChannel(data)
 	c.IndentedJSON(http.StatusCreated, data)
 }
 
@@ -229,4 +232,16 @@ func (h *Handler) DeleteBook(c *gin.Context) {
 	c.IndentedJSON(http.StatusNoContent, gin.H{
 		"message": "Resource deleted successfully",
 	})
+}
+
+func (h *Handler) publishNewBookToChannel(book model.Book) {
+	payload, err := json.Marshal(book)
+	if err != nil {
+		log.WithError(err).Error("error converting model to string")
+		return
+	}
+	err = h.Redis.PublishToChannel(context.Background(), settings.ApplicationConfiguration.Service1.NewBookChannelName, payload)
+	if err != nil {
+		log.WithError(err).Error("error publishing NewBook to channel")
+	}
 }

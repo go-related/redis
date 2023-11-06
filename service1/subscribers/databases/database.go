@@ -18,6 +18,7 @@ type SubscribeDB interface {
 	DeleteSubscribe(ctx context.Context, Id uint) error
 	GetAllSubscribes(ctx context.Context) ([]model.Subscribe, error)
 	GetSubscribeById(ctx context.Context, Id uint) (*model.Subscribe, error)
+	GetAuthorsSubscribers(ctx context.Context, listOfAuthors []booksmodel.Author) ([]model.Subscriber, error)
 }
 
 type subscribeDB struct {
@@ -75,4 +76,42 @@ func (s *subscribeDB) GetSubscriberById(ctx context.Context, Id uint) (*model.Su
 		}
 	}
 	return nil, fmt.Errorf("entity not found")
+}
+
+func (s *subscribeDB) GetAuthorsSubscribers(ctx context.Context, listOfAuthors []booksmodel.Author) ([]model.Subscriber, error) {
+	// helper to check if a subscriber is interested in our list of authors
+	isSubscriberInterested := func(sub *model.Subscribe, listOfAuthors []booksmodel.Author) bool {
+		if sub.Authors != nil {
+			for _, potentialAuthor := range *sub.Authors {
+				for _, interestedAuthor := range listOfAuthors {
+					if potentialAuthor.ID == interestedAuthor.ID {
+						return true
+					}
+				}
+			}
+		}
+
+		return false
+	}
+	// helper to not register duplicated data on our potential result
+	isSubscriberAlreadyRegistered := func(sub model.Subscriber, result []model.Subscriber) bool {
+		for _, currentSub := range result {
+			if sub.ID == currentSub.ID {
+				return true
+			}
+		}
+		return false
+	}
+
+	var result []model.Subscriber
+	if len(listOfAuthors) > 0 {
+		for _, dt := range s.Subscribes {
+			if !dt.IsDeleted && isSubscriberInterested(dt, listOfAuthors) && !isSubscriberAlreadyRegistered(dt.Subscriber, result) {
+				result = append(result, dt.Subscriber)
+			}
+		}
+	}
+
+	return result, nil
+
 }

@@ -23,9 +23,9 @@ func New() *RedisService {
 	return &RedisService{rdb}
 }
 
-func (rs *RedisService) PublishToChannel(ctx context.Context, channelName string, data interface{}) error {
+func (rs *RedisService) PublishToChannel(ctx context.Context, channelName string, payload []byte) error {
 
-	err := rs.client.Publish(ctx, channelName, data).Err()
+	err := rs.client.Publish(ctx, channelName, payload).Err()
 	if err != nil {
 		logrus.WithError(err).Error("failed to send data to channel")
 	}

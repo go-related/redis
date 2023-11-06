@@ -3,6 +3,7 @@ package service1
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	redis2 "github.com/go-related/redis/redis"
 	"github.com/go-related/redis/service1/books/datebase"
 	"github.com/go-related/redis/service1/books/handler"
 	"github.com/go-related/redis/service1/subscribers/databases"
@@ -18,9 +19,10 @@ type Service struct {
 func InitService(appSettings settings.Service1) (*Service, error) {
 	router := gin.Default()
 	booksDb := datebase.NewBooksDB()
-	handler.NewHandler(booksDb, router)
+	redisService := redis2.New()
+	handler.NewHandler(booksDb, router, redisService)
 	subscriberDb := databases.NewSubscriberDB()
-	handler2.NewSubscriberHandler(booksDb, subscriberDb, router)
+	handler2.NewSubscriberHandler(booksDb, subscriberDb, router, redisService)
 
 	router.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{

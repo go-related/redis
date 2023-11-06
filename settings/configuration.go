@@ -20,13 +20,15 @@ type Redis struct {
 }
 
 type Service1 struct {
-	Port string
-	Name string
+	Port               string
+	Name               string
+	NewBookChannelName string
 }
 
 type Service2 struct {
-	Port string
-	Name string
+	Port               string
+	Name               string
+	NewBookChannelName string
 }
 
 var ApplicationConfiguration Configurations
