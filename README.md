@@ -15,7 +15,11 @@ To communicate we will use Redis and to store data we will use redis as well.
 
 ### Notes ###
 * build the application
-  ``` go build -o bin/redis ```
+  ``` code 
+  go build -o bin/redis
+   ```
 
 * run service1
-  ``` ./bin/redis service1 ```
+  ``` code 
+  ./bin/redis service1 
+  ```

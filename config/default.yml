@@ -4,3 +4,8 @@ service1:
 service2:
   port: 8082
   name: test2
+redis:
+  host: localhost
+  port: 6379
+  password: ""
+  db: 0

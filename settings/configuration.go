@@ -7,13 +7,23 @@ import (
 )
 
 type Configurations struct {
+	Redis    Redis
 	Service1 Service1
 	Service2 Service2
 }
+
+type Redis struct {
+	Host     string
+	Port     string
+	Password string
+	Db       int
+}
+
 type Service1 struct {
 	Port string
 	Name string
 }
+
 type Service2 struct {
 	Port string
 	Name string
