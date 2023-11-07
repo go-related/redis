@@ -1,7 +1,7 @@
 # README #
 
 Here I will demonstrate communication between 2 microservices, for simplicity reason we will have both of them into the same repository.
-To communicate we will use Redis and to store data we will use redis as well.
+To communicate we will use redis and to store data we will use postgresSQL.
 * Service 1
   * this will be a simple service with a Crud and will publish an event when create book call will happen.
 * Service 2
