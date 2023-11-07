@@ -32,14 +32,14 @@ type BooksDB interface {
 	CreateSubscriber(ctx context.Context, data smodel.Subscriber) (smodel.Subscriber, error)
 	UpdateSubscriber(ctx context.Context, data smodel.Subscriber) error
 	DeleteSubscriber(ctx context.Context, Id uint) error
-	GetAllSubscribers(ctx context.Context) ([]smodel.Subscriber, error)
+	GetAllSubscribers(ctx context.Context) ([]*smodel.Subscriber, error)
 	GetSubscriberById(ctx context.Context, Id uint) (*smodel.Subscriber, error)
 
 	Subscribe(ctx context.Context, subscriberID uint, listOfBooks *[]model.Book, listOfAuthors *[]model.Author) (*smodel.Subscribe, error)
 	DeleteSubscribe(ctx context.Context, Id uint) error
-	GetAllSubscribes(ctx context.Context) ([]smodel.Subscribe, error)
+	GetAllSubscribes(ctx context.Context) ([]*smodel.Subscribe, error)
 	GetSubscribeById(ctx context.Context, Id uint) (*smodel.Subscribe, error)
-	GetAuthorsSubscribers(ctx context.Context, listOfAuthors []model.Author) ([]smodel.Subscriber, error)
+	GetAuthorsSubscribers(ctx context.Context, listOfAuthors []*model.Author) ([]*smodel.Subscriber, error)
 }
 
 type booksDb struct {
