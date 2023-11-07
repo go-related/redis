@@ -1,0 +1,591 @@
+{
+	"info": {
+		"_postman_id": "04eb8981-6a19-44ff-bd2a-e0882d9d4c91",
+		"name": "redis",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5822435"
+	},
+	"item": [
+		{
+			"name": "service1",
+			"item": [
+				{
+					"name": "genres",
+					"item": [
+						{
+							"name": "genres",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{redisService1}}/v1/api/genres",
+									"host": [
+										"{{redisService1}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"genres"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "genreByID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{redisService1}}/v1/api/genres/1",
+									"host": [
+										"{{redisService1}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"genres",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteGenre",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{redisService1}}/v1/api/genres/1",
+									"host": [
+										"{{redisService1}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"genres",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "updateGenre",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n       \"name\": \"Action 1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{redisService1}}/v1/api/genres/1",
+									"host": [
+										"{{redisService1}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"genres",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "createGenre",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n       \"name\": \"sience fiction\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{redisService1}}/v1/api/genres",
+									"host": [
+										"{{redisService1}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"genres"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "authors",
+					"item": [
+						{
+							"name": "authors",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{redisService1}}/v1/api/authors",
+									"host": [
+										"{{redisService1}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"authors"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "authorByID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{redisService1}}/v1/api/authors/5",
+									"host": [
+										"{{redisService1}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"authors",
+										"5"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteAuthor",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{redisService1}}/v1/api/authors/5",
+									"host": [
+										"{{redisService1}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"authors",
+										"5"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UpdateAuthor",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n       \"name\": \"test author\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{redisService1}}/v1/api/authors/5",
+									"host": [
+										"{{redisService1}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"authors",
+										"5"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateAuthor",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n       \"name\": \"author test\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{redisService1}}/v1/api/authors",
+									"host": [
+										"{{redisService1}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"authors"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "books",
+					"item": [
+						{
+							"name": "books",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{redisService1}}/v1/api/books",
+									"host": [
+										"{{redisService1}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"books"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "bookByID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{redisService1}}/v1/api/books/1",
+									"host": [
+										"{{redisService1}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"books",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteBook",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{redisService1}}/v1/api/books/1",
+									"host": [
+										"{{redisService1}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"books",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UpdateBook",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n       \"title\": \"update title\",\n       \"authors\":[1,2],\n       \"genres\":[1]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{redisService1}}/v1/api/books/1",
+									"host": [
+										"{{redisService1}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"books",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateBook",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n       \"title\": \"book 9\",\n       \"authors\":[6],\n       \"genres\":[2,3]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{redisService1}}/v1/api/books",
+									"host": [
+										"{{redisService1}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"books"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "subscribers",
+					"item": [
+						{
+							"name": "subscribers",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{redisService1}}/v1/api/subscribers",
+									"host": [
+										"{{redisService1}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"subscribers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "subscriberByID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{redisService1}}/v1/api/subscribers/1",
+									"host": [
+										"{{redisService1}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"subscribers",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "createSubscribers",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n       \"name\": \"test2\",\n       \"email\":\"test2@mail.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{redisService1}}/v1/api/subscribers",
+									"host": [
+										"{{redisService1}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"subscribers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "updateSubscribers",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n       \"name\": \"test\",\n       \"email\":\"test1@mail.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{redisService1}}/v1/api/subscribers/1",
+									"host": [
+										"{{redisService1}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"subscribers",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteSubscriber",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{redisService1}}/v1/api/subscribers/1",
+									"host": [
+										"{{redisService1}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"subscribers",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "subscribe",
+					"item": [
+						{
+							"name": "subscribe",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{redisService1}}/v1/api/subscribes",
+									"host": [
+										"{{redisService1}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"subscribes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "createSubscribe",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"subscriber_id\":1,\n    \n    \"authors\":[1]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{redisService1}}/v1/api/subscribes",
+									"host": [
+										"{{redisService1}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"subscribes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "subscribeById",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{redisService1}}/v1/api/subscribes/1",
+									"host": [
+										"{{redisService1}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"subscribes",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteSubscribe",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{redisService1}}/v1/api/subscribes/1",
+									"host": [
+										"{{redisService1}}"
+									],
+									"path": [
+										"v1",
+										"api",
+										"subscribes",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
