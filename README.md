@@ -3,9 +3,9 @@
 Here I will demonstrate communication between 2 microservices, for simplicity reason we will have both of them into the same repository.
 To communicate we will use Redis and to store data we will use redis as well.
 * Service 1
-  * this will be a simple service with a Crud and will publish an event when create/update/path/Delete will happen.
+  * this will be a simple service with a Crud and will publish an event when create book call will happen.
 * Service 2
-  * this will be the interested. once the event will be published this will send email to appropriate addresses.
+  * this will be the interested. once the event will be published this will send email(just log sm) to appropriate addresses.
 
 
 ### Prerequisites ###
