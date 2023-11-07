@@ -8,14 +8,11 @@ import (
 )
 
 func (b *booksDb) Subscribe(ctx context.Context, subscriberID uint, listOfBooks []model.Book, listOfAuthors []model.Author) (*smodel.Subscribe, error) {
-	subscriber, err := b.GetSubscriberById(ctx, subscriberID)
-	if err != nil {
-		return nil, err
-	}
+
 	data := smodel.Subscribe{
-		Subscriber: *subscriber,
-		Books:      listOfBooks,
-		Authors:    listOfAuthors,
+		SubscriberID: subscriberID,
+		Books:        listOfBooks,
+		Authors:      listOfAuthors,
 	}
 	result := b.Db.Model(&smodel.Subscribe{}).Create(&data)
 	if result.Error != nil {

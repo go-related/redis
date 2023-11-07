@@ -13,7 +13,7 @@ type Subscriber struct {
 
 type Subscribe struct {
 	gorm.Model
-	Subscriber Subscriber     `gorm:"many2many:subscribe_subscriber;"`
-	Books      []model.Book   `gorm:"many2many:subscribe_book;"`
-	Authors    []model.Author `gorm:"many2many:subscribe_author;"`
+	SubscriberID uint
+	Books        []model.Book   `gorm:"many2many:subscribe_book;"`
+	Authors      []model.Author `gorm:"many2many:subscribe_author;"`
 }
