@@ -81,9 +81,9 @@ func (h *Handler) UpdateGenre(c *gin.Context) {
 		return
 	}
 	genreData := model.Genre{
-		ID:   uint(idValue),
 		Name: input.Name,
 	}
+	genreData.ID = uint(idValue)
 	err = h.BookDb.UpdateGenre(context.Background(), genreData)
 	if err != nil {
 		errorData := middleware.Response{

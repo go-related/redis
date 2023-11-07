@@ -55,20 +55,6 @@ func (h *Handler) GetBook(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, result)
 }
 
-func (h *Handler) GetBooksByTitle(c *gin.Context) {
-	title := c.Params.ByName("title")
-	result, err := h.BookDb.SearchBooksByTitle(context.Background(), title)
-	if err != nil {
-		errorData := middleware.Response{
-			StatusCode: http.StatusInternalServerError,
-			Err:        err,
-		}
-		c.AbortWithStatusJSON(http.StatusInternalServerError, errorData)
-		return
-	}
-	c.IndentedJSON(http.StatusOK, result)
-}
-
 func (h *Handler) UpdateBook(c *gin.Context) {
 	id := c.Params.ByName("id")
 
@@ -101,11 +87,11 @@ func (h *Handler) UpdateBook(c *gin.Context) {
 	//TODO check if the list of Authors and genres is valid
 	// implement is valid for the Model
 	bookData := model.Book{
-		ID:      uint(idValue),
 		Title:   input.Title,
 		Authors: []model.Author{},
 		Genres:  []model.Genre{},
 	}
+	bookData.ID = uint(idValue)
 	for _, dt := range input.Authors {
 		authorDt, err := h.BookDb.GetAuthorById(context.Background(), dt)
 		if err != nil {

@@ -7,7 +7,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func (b *booksDb) Subscribe(ctx context.Context, subscriberID uint, listOfBooks *[]model.Book, listOfAuthors *[]model.Author) (*smodel.Subscribe, error) {
+func (b *booksDb) Subscribe(ctx context.Context, subscriberID uint, listOfBooks []model.Book, listOfAuthors []model.Author) (*smodel.Subscribe, error) {
 	subscriber, err := b.GetSubscriberById(ctx, subscriberID)
 	if err != nil {
 		return nil, err
@@ -54,7 +54,7 @@ func (b *booksDb) GetSubscribeById(ctx context.Context, Id uint) (*smodel.Subscr
 	return &output, result.Error
 }
 
-func (b *booksDb) GetAuthorsSubscribers(ctx context.Context, listOfAuthors []*model.Author) ([]*smodel.Subscriber, error) {
+func (b *booksDb) GetAuthorsSubscribers(ctx context.Context, listOfAuthors []model.Author) ([]*smodel.Subscriber, error) {
 	var outputList []*smodel.Subscriber
 	if len(listOfAuthors) == 0 {
 		return outputList, nil

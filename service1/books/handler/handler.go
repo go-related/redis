@@ -3,10 +3,10 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-related/redis/redis"
-	"github.com/go-related/redis/service1/books/datebase"
+	"github.com/go-related/redis/service1/database"
 )
 
-func NewHandler(bookDb datebase.BooksDB, router *gin.Engine, rd *redis.RedisService) *Handler {
+func NewHandler(bookDb database.BooksDB, router *gin.Engine, rd *redis.RedisService) *Handler {
 	handler := &Handler{
 		BookDb: bookDb,
 		Engine: router,
@@ -41,7 +41,7 @@ func NewHandler(bookDb datebase.BooksDB, router *gin.Engine, rd *redis.RedisServ
 
 // Handler implements crud for handles GET /v1/api/genres
 type Handler struct {
-	BookDb datebase.BooksDB
+	BookDb database.BooksDB
 	Engine *gin.Engine
 	Redis  *redis.RedisService
 }

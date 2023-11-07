@@ -35,11 +35,11 @@ type BooksDB interface {
 	GetAllSubscribers(ctx context.Context) ([]*smodel.Subscriber, error)
 	GetSubscriberById(ctx context.Context, Id uint) (*smodel.Subscriber, error)
 
-	Subscribe(ctx context.Context, subscriberID uint, listOfBooks *[]model.Book, listOfAuthors *[]model.Author) (*smodel.Subscribe, error)
+	Subscribe(ctx context.Context, subscriberID uint, listOfBooks []model.Book, listOfAuthors []model.Author) (*smodel.Subscribe, error)
 	DeleteSubscribe(ctx context.Context, Id uint) error
 	GetAllSubscribes(ctx context.Context) ([]*smodel.Subscribe, error)
 	GetSubscribeById(ctx context.Context, Id uint) (*smodel.Subscribe, error)
-	GetAuthorsSubscribers(ctx context.Context, listOfAuthors []*model.Author) ([]*smodel.Subscriber, error)
+	GetAuthorsSubscribers(ctx context.Context, listOfAuthors []model.Author) ([]*smodel.Subscriber, error)
 }
 
 type booksDb struct {
@@ -53,7 +53,7 @@ func NewBooks() (BooksDB, error) {
 		logrus.WithError(err).Error("error connecting to db")
 		return &result, err
 	}
-	err = db.AutoMigrate(&model.Book{}, &model.Author{}, &model.Genre{}, &smodel.Subscriber{}, &smodel.Subscribe{})
+	err = db.AutoMigrate(&model.Author{}, &model.Genre{}, &smodel.Subscriber{}, &model.Book{}, &smodel.Subscribe{})
 	if err != nil {
 		logrus.WithError(err).Error("couldn't migrate the db")
 		return &result, err

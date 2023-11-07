@@ -112,10 +112,10 @@ func (h *SubscriberHandler) UpdateSubscriber(c *gin.Context) {
 		return
 	}
 	toUpdateData := model.Subscriber{
-		ID:       uint(idValue),
 		Email:    input.Email,
 		FullName: input.FullName,
 	}
+	toUpdateData.ID = uint(idValue)
 	err = h.DB.UpdateSubscriber(context.Background(), toUpdateData)
 	if err != nil {
 		errorData := middleware.Response{
@@ -308,7 +308,7 @@ func (h *SubscriberHandler) CreateSubscribe(c *gin.Context) {
 		}
 	}
 
-	currentData, err := h.DB.Subscribe(context.Background(), input.SubscriberID, &books, &authors)
+	currentData, err := h.DB.Subscribe(context.Background(), input.SubscriberID, books, authors)
 	if err != nil {
 		errorData := middleware.Response{
 			StatusCode: http.StatusInternalServerError,

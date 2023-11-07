@@ -53,20 +53,6 @@ func (h *Handler) GetAuthor(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, result)
 }
 
-func (h *Handler) GetAuthorsByName(c *gin.Context) {
-	name := c.Params.ByName("name")
-	result, err := h.BookDb.SearchAuthorsByName(context.Background(), name)
-	if err != nil {
-		errorData := middleware.Response{
-			StatusCode: http.StatusInternalServerError,
-			Err:        err,
-		}
-		c.AbortWithStatusJSON(http.StatusInternalServerError, errorData)
-		return
-	}
-	c.IndentedJSON(http.StatusOK, result)
-}
-
 func (h *Handler) UpdateAuthor(c *gin.Context) {
 	id := c.Params.ByName("id")
 
@@ -95,9 +81,9 @@ func (h *Handler) UpdateAuthor(c *gin.Context) {
 		return
 	}
 	authorData := model.Author{
-		ID:         uint(idValue),
 		PublicName: input.Name,
 	}
+	authorData.ID = uint(idValue)
 	err = h.BookDb.UpdateAuthor(context.Background(), authorData)
 	if err != nil {
 		errorData := middleware.Response{

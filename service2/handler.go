@@ -5,17 +5,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/go-related/redis/redis"
-	"github.com/go-related/redis/service1/books/datebase"
 	"github.com/go-related/redis/service1/books/model"
-	"github.com/go-related/redis/service1/subscribers/databases"
+	"github.com/go-related/redis/service1/database"
 	"github.com/go-related/redis/settings"
 	"github.com/sirupsen/logrus"
 )
 
 type Handler struct {
-	BookDb       datebase.BooksDB
-	SubscriberDB databases.SubscribeDB
-	Redis        *redis.RedisService
+	BookDb database.BooksDB
+	Redis  *redis.RedisService
 }
 
 func (h *Handler) ListenForNewBook() {
@@ -42,8 +40,8 @@ func (h *Handler) sendBooksEmail(book model.Book) {
 		logrus.WithError(err).Error("error loading book")
 		return
 	}
-	if !data.IsDeleted { //check for sanity
-		subscribers, err := h.SubscriberDB.GetAuthorsSubscribers(context.Background(), data.Authors)
+	if data != nil { //check for sanity
+		subscribers, err := h.BookDb.GetAuthorsSubscribers(context.Background(), data.Authors)
 		if err != nil {
 			logrus.WithError(err).Error("error loading subscribers")
 			return

@@ -5,8 +5,8 @@ import "gorm.io/gorm"
 type Book struct {
 	gorm.Model
 	Title   string
-	Authors []Author
-	Genres  []Genre
+	Authors []Author `gorm:"many2many:book_authors;"`
+	Genres  []Genre  `gorm:"many2many:book_genres;"`
 }
 
 type Author struct {
