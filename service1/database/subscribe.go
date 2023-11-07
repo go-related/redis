@@ -61,7 +61,10 @@ func (b *booksDb) GetAuthorsSubscribers(ctx context.Context, listOfAuthors []mod
 		authors = append(authors, author.ID)
 	}
 
-	result := b.Db.Model(&smodel.Subscriber{}).Where("author_id in ? ", authors).Find(&outputList)
+	result := b.Db.Model(&smodel.Subscriber{}).
+		Joins(`join subscribes s on s.subscriber_id= subscribers.id`).
+		Joins(`join subscribe_author sa ON sa.subscribe_id =s.id `).
+		Where(" sa.author_id in ? ", authors).Find(&outputList)
 	if result.Error != nil {
 		logrus.WithError(result.Error).Error("couldn't load subscribers for the authors")
 	}

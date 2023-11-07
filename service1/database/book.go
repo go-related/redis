@@ -54,7 +54,7 @@ func (b *booksDb) GetAllBooks(ctx context.Context) ([]*model.Book, error) {
 
 func (b *booksDb) GetBookById(ctx context.Context, Id uint) (*model.Book, error) {
 	var output model.Book
-	result := b.Db.Model(&model.Book{}).First(&output, Id)
+	result := b.Db.Model(&model.Book{}).Preload("Authors").Preload("Genres").First(&output, Id)
 	if result.Error != nil {
 		logrus.WithError(result.Error).Error("couldn't load book")
 	}

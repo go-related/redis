@@ -29,7 +29,7 @@ func (h *Handler) ListenForNewBook() {
 			logrus.WithError(err).Error("error parsing book from channel")
 			continue
 		}
-		go h.sendBooksEmail(book)
+		h.sendBooksEmail(book)
 	}
 
 }
@@ -49,7 +49,7 @@ func (h *Handler) sendBooksEmail(book model.Book) {
 		subject := "New Book !!!"
 		for _, subscriber := range subscribers {
 			body := fmt.Sprintf("Hi %s,\n New book '%s' is out.\n Enjoy!!!!", subscriber.FullName, book.Title)
-			go h.sendEmail(body, subject, subscriber.Email)
+			h.sendEmail(body, subject, subscriber.Email)
 		}
 	}
 }
