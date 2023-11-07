@@ -7,7 +7,7 @@ import (
 )
 
 func (b *booksDb) CreateGenre(ctx context.Context, data model.Genre) (model.Genre, error) {
-	result := b.Db.Model(&model.Author{}).Create(&data)
+	result := b.Db.Model(&model.Genre{}).Create(&data)
 	if result.Error != nil {
 		logrus.WithError(result.Error).Error("couldn't create the genre")
 	}
