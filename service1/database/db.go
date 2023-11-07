@@ -14,22 +14,20 @@ type BooksDB interface {
 	CreateAuthor(ctx context.Context, data model.Author) (model.Author, error)
 	UpdateAuthor(ctx context.Context, data model.Author) error
 	DeleteAuthor(ctx context.Context, Id uint) error
-	GetAllAuthors(ctx context.Context) ([]model.Author, error)
+	GetAllAuthors(ctx context.Context) ([]*model.Author, error)
 	GetAuthorById(ctx context.Context, Id uint) (*model.Author, error)
-	SearchAuthorsByName(ctx context.Context, title string) ([]model.Author, error)
 
 	CreateGenre(ctx context.Context, data model.Genre) (model.Genre, error)
 	UpdateGenre(ctx context.Context, data model.Genre) error
 	DeleteGenre(ctx context.Context, Id uint) error
-	GetAllGenres(ctx context.Context) ([]model.Genre, error)
+	GetAllGenres(ctx context.Context) ([]*model.Genre, error)
 	GetGenresById(ctx context.Context, Id uint) (*model.Genre, error)
 
 	CreateBook(ctx context.Context, data model.Book) (model.Book, error)
 	UpdateBook(ctx context.Context, data model.Book) error
 	DeleteBook(ctx context.Context, Id uint) error
-	GetAllBooks(ctx context.Context) ([]model.Book, error)
+	GetAllBooks(ctx context.Context) ([]*model.Book, error)
 	GetBookById(ctx context.Context, Id uint) (*model.Book, error)
-	SearchBooksByTitle(ctx context.Context, title string) ([]model.Book, error)
 
 	CreateSubscriber(ctx context.Context, data smodel.Subscriber) (smodel.Subscriber, error)
 	UpdateSubscriber(ctx context.Context, data smodel.Subscriber) error
